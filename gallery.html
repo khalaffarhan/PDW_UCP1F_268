@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimedia – Tech Community</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a class="brand" href="./index.html">Tech Community</a>
+        <ul>
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="./form.html">Daftar</a></li>
+            <li><a href="./gallery.html" class="active">Multimedia</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div class="media-grid">
+
+            <!-- GAMBAR -->
+            <div class="media-card">
+                <div class="media-judul">Galeri Foto</div>
+                <div class="media-body">
+
+                    <!-- Foto utama yang ditampilkan -->
+                    <img id="foto-utama"
+                         src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80"
+                         alt="Foto teknologi">
+                    <p class="caption" id="foto-caption">Motherboard komputer modern</p>
+
+                    <!-- Thumbnail grid -->
+                    <div class="foto-grid" id="foto-grid"></div>
+
+                    <!-- Panel tambah gambar -->
+                    <div class="tambah-panel">
+                        <label>Tambah via URL</label>
+                        <input type="text" id="inputURL" placeholder="https://...">
+                        <button class="btn btn-biru" style="font-size:0.82rem;padding:7px 14px;" onclick="tambahURL()">Tambah</button>
+
+                        <label style="margin-top:10px;">Tambah via Upload</label>
+                        <input type="file" id="inputFile" accept="image/*" onchange="tambahFile(event)">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- VIDEO -->
+            <div class="media-card">
+                <div class="media-judul">Video YouTube</div>
+                <div class="media-body">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                            title="Video Tech" allowfullscreen></iframe>
+                    <p class="caption">Video edukasi teknologi dari YouTube</p>
+                </div>
+            </div>
+
+            <!-- AUDIO -->
+            <div class="media-card" style="grid-column: 1 / -1;">
+                <div class="media-judul">Audio Player</div>
+                <div class="media-body">
+                    <audio id="audioPlayer">
+                        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                    </audio>
+                    <button class="btn btn-biru"  style="font-size:0.85rem;" onclick="mainkan()">&#9654; Play</button>
+                    <button class="btn btn-abu"   style="font-size:0.85rem;" onclick="hentikan()">&#9646;&#9646; Stop</button>
+                    <button class="btn btn-outline" style="font-size:0.85rem;" onclick="infoAudio()">Info</button>
+                    <p id="audio-status">Siap diputar</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="text-align:center; margin-top:24px;">
+            <a href="./index.html" class="btn btn-outline">Kembali ke Home</a>
+        </div>
+
+    </div>
+
+    <footer>&copy; 2026 Tech Community</footer>
+
+    <script>
+        // Array menyimpan semua gambar
+        var daftarGambar = [
+            { src: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", caption: "Motherboard komputer modern" },
+            { src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&q=80", caption: "Coding dan pemrograman" },
+            { src: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80", caption: "Ruang kerja teknologi" }
+        ];
+
+        var indexAktif = 0;
+
+        // Tampilkan semua thumbnail
+        function renderGrid() {
+            var grid = document.getElementById("foto-grid");
+            grid.innerHTML = "";
+            for (var i = 0; i < daftarGambar.length; i++) {
+                var kelas = "foto-thumb" + (i === indexAktif ? " aktif" : "");
+                grid.innerHTML += "<img src='" + daftarGambar[i].src + "' class='" + kelas + "' onclick='pilihGambar(" + i + ")' alt='foto'>";
+            }
+        }
+
+        // Pilih gambar dari thumbnail
+        function pilihGambar(index) {
+            indexAktif = index;
+            document.getElementById("foto-utama").src = daftarGambar[index].src;
+            document.getElementById("foto-caption").textContent = daftarGambar[index].caption;
+            renderGrid();
+        }
+
+        // Tambah gambar dari URL
+        function tambahURL() {
+            var url = document.getElementById("inputURL").value.trim();
+            if (url == "") { alert("URL tidak boleh kosong!"); return; }
+
+            daftarGambar.push({ src: url, caption: "Gambar " + (daftarGambar.length + 1) });
+            document.getElementById("inputURL").value = "";
+            pilihGambar(daftarGambar.length - 1);
+            alert("Gambar berhasil ditambahkan!");
+        }
+
+        // Tambah gambar dari file lokal
+        function tambahFile(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var nama = file.name.replace(/\.[^/.]+$/, "");
+                daftarGambar.push({ src: e.target.result, caption: nama });
+                pilihGambar(daftarGambar.length - 1);
+                alert("Gambar \"" + nama + "\" berhasil ditambahkan!");
+            };
+            reader.readAsDataURL(file);
+            event.target.value = "";
+        }
+
+        // ===== AUDIO =====
+        var audio = document.getElementById("audioPlayer");
+
+        function mainkan() {
+            audio.play();
+            document.getElementById("audio-status").textContent = "Sedang diputar...";
+        }
+
+        function hentikan() {
+            audio.pause();
+            audio.currentTime = 0;
+            document.getElementById("audio-status").textContent = "Dihentikan.";
+        }
+
+        function infoAudio() {
+            alert("Judul  : SoundHelix Song 1\nFormat : MP3\nDurasi : sekitar 7 menit");
+        }
+
+        // Jalankan saat halaman dibuka
+        renderGrid();
+    </script>
+
+</body>
+</html>
