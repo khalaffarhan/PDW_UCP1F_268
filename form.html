@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran – Tech Community</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <a class="brand" href="./index.html">
+            <span class="brand-dot"></span>
+            Tech Community
+        </a>
+        <ul>
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="./form.html" class="active">Daftar</a></li>
+            <li><a href="./gallery.html">Multimedia</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div style="max-width: 640px; margin: 0 auto;">
+
+            <p class="page-title">Formulir Pendaftaran</p>
+            <p class="page-sub">Isi data di bawah ini untuk bergabung dengan Tech Community.</p>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">&#128221;</div>
+                    <h2>Data Anggota Baru</h2>
+                </div>
+
+                <form name="Formulir Pengisian" id="formAnggota">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="Nama">
+                                Nama Lengkap
+                                <span class="required-star">*</span>
+                            </label>
+                            <input id="Nama" name="Nama" type="text" placeholder="Contoh: Budi Santoso">
+                        </div>
+                        <div class="form-group">
+                            <label for="Email">
+                                Alamat Email
+                                <span class="required-star">*</span>
+                            </label>
+                            <input id="Email" name="Email" type="email" placeholder="contoh@email.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Telepon">Nomor Telepon</label>
+                        <input id="Telepon" name="Telepon" type="text" placeholder="08xxxxxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Minat">
+                            Bidang Minat
+                            <span class="required-star">*</span>
+                        </label>
+                        <div class="select-wrap">
+                            <select id="Minat" name="Minat">
+                                <option value="">-- Pilih Bidang Minat --</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Mobile Development">Mobile Development</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="AI & Machine Learning">AI &amp; Machine Learning</option>
+                                <option value="Cybersecurity">Cybersecurity</option>
+                                <option value="Cloud Computing">Cloud Computing</option>
+                                <option value="UI/UX Design">UI/UX Design</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <input type="submit" value="Simpan Data" class="btn btn-primary">
+                        <a href="./index.html" class="btn btn-neutral">&#8592; Kembali ke Home</a>
+                    </div>
+
+                </form>
+
+                <!-- Hasil input -->
+                <div id="result-box">
+                    <div class="result-title">&#10003;&nbsp; Data berhasil disimpan!</div>
+                    <div id="result-content"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 <strong>Tech Community</strong> &mdash; Dibuat dengan semangat belajar
+    </footer>
+
+    <script>
+        const dataTersimpan = [];
+
+        document.getElementById("formAnggota").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const nama    = document.getElementById("Nama").value.trim();
+            const email   = document.getElementById("Email").value.trim();
+            const telepon = document.getElementById("Telepon").value.trim();
+            const minat   = document.getElementById("Minat").value;
+
+            if (!nama || !email || !minat) {
+                alert("Harap isi nama, email, dan bidang minat terlebih dahulu!");
+                return;
+            }
+
+            const anggotaBaru = { nama, email, telepon, minat };
+            dataTersimpan.push(anggotaBaru);
+
+            const existing = JSON.parse(localStorage.getItem("anggota_baru") || "[]");
+            existing.push(anggotaBaru);
+            localStorage.setItem("anggota_baru", JSON.stringify(existing));
+
+            document.getElementById("result-content").innerHTML = `
+                <strong>Nama&emsp;&emsp;&ensp;:</strong> ${nama}<br>
+                <strong>Email&emsp;&emsp;&ensp;:</strong> ${email}<br>
+                <strong>Telepon&emsp;:</strong> ${telepon || "-"}<br>
+                <strong>Minat&emsp;&emsp;&ensp;:</strong> ${minat}
+            `;
+            document.getElementById("result-box").style.display = "block";
+            document.getElementById("result-box").scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+            this.reset();
+        });
+    </script>
+
+</body>
+</html>
