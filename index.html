@@ -87,4 +87,9 @@
             { nama: "Reza Firmansyah", email: "reza@email.com",    minat: "AI & Machine Learning" },
         ];
 
+        const tambahan = JSON.parse(localStorage.getItem("anggota_baru") || "[]");
+        const semuaAnggota = [...anggota, ...tambahan];
+
+        document.getElementById("total-anggota").textContent = semuaAnggota.length;
+
        
